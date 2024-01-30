@@ -30,3 +30,7 @@ Data Collection and Training: Gather a large dataset of hand images/videos paire
 Model Development and Optimization: Develop robust algorithms that can accurately recognize hand gestures even in challenging conditions.
 User Interface Design: Create a user-friendly interface for configuring hand gestures and mapping them to game inputs.
 Game Engine Integration: Develop plugins or APIs that allow seamless integration of your application with popular game engines.
+
+
+#Big Question:
+How is our relevant. What would we do differently
