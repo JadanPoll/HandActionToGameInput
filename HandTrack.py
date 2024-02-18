@@ -315,8 +315,8 @@ def main_loop():
                 timer.start()
                 print("Mouse DOWN")
                 pyautogui.mouseDown()
-
-                threading.Thread(target=PLAY_ONE_SHOT_CLICK).start()
+                PLAY_ONE_SHOT_CLICK()
+                #threading.Thread(target=PLAY_ONE_SHOT_CLICK).start()
 
                 IS_MOUSE_DOWN = True
         else:
@@ -324,7 +324,8 @@ def main_loop():
                 ENABLE_MOUSE_MOVE()
                 print("Mouse Up")
                 pyautogui.mouseUp()
-                threading.Thread(target=PLAY_ONE_SHOT_UNCLICK).start() #Says non- blocking but original funciton itself does have minisule slow down
+                PLAY_ONE_SHOT_UNCLICK()
+                #threading.Thread(target=PLAY_ONE_SHOT_UNCLICK).start() #Says non- blocking but original funciton itself does have minisule slow down
 
 
                 IS_MOUSE_DOWN = False
