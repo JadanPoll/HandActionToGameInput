@@ -1,18 +1,43 @@
-This amazing code uses some powerful libraries such as MediaPipe and OpenCV to help you control your mouse pointer using your index finger!  
+# FingerMouse Control with MediaPipe and OpenCV
 
-It works using your computer camera and then tracks the movement of your index finger through the webcam in real-time and uses it to control the movement of your mouse pointer on the screen. 
+This impressive Python script leverages the power of MediaPipe and OpenCV to enable mouse pointer control using your index finger! Utilizing your computer's camera, it tracks the real-time movement of your index finger through the webcam, translating it into precise control over your mouse pointer on the screen.
 
-It also has some other cool features. For instance, it detects when your finger and thumb are touching and simulates a mouse click accordingly. It can also detect when your finger and pinky are touching, which can be used to perform other actions(I was thinking right-click not yet implemented).
+## Features:
 
-To make sure your finger movement is as smooth as possible, the code uses a moving average filter to calculate the average position of your finger over a window of frames, and also applies an anti-jitter filter to eliminate any shakiness(just focus your index finger).
+1. **Real-time Hand Tracking:**
+   - Uses the MediaPipe library to detect and track the movement of your index finger.
+   - Captures video frames from the webcam and processes them with OpenCV.
 
-I've found its better to control mouse pointer as if you were just about to pinch cause feature extraction works better when not pointing directly at the camera. ALso makes it easy to pinch for a click
+2. **Mouse Pointer Control:**
+   - Maps the tracked finger movements to the mouse pointer on the screen.
+   - Employs linear interpolation and smoothing for fluid and responsive control.
 
-Click is simulated by mosue down and then an unclick mouseup. Need to improve it cause if you shake while on moue click it interprets it as a drag
+3. **Gesture-Based Actions:**
+   - Detects when your finger and thumb are touching, simulating a mouse click.
+   - Recognizes finger and pinky touches for potential additional actions (e.g., right-click, not yet implemented).
 
-In addition to controlling the mouse pointer, the code can also impose the MediaPipe hand pose on your hand in the frame, and draw landmarks on the frame to visualize the detected hand movements.
+4. **Smooth Finger Movement:**
+   - Applies a moving average filter to calculate the average finger position over a window of frames.
+   - Utilizes an anti-jitter filter to eliminate any shakiness, ensuring smooth and precise control.
 
+5. **Optimal Gesture for Best Results:**
+   - Recommends controlling the mouse pointer as if you were about to pinch, as feature extraction works better.
+   - Advises focusing on the index finger for improved accuracy.
 
+6. **Simulated Click:**
+   - Simulates a click by initiating a mouse down and unclick (mouseup) sequence.
+   - Acknowledges the need for improvement, especially when shaking during a mouse click.
+
+7. **Hand Pose Visualization:**
+   - Imposes the MediaPipe hand pose on your hand in the frame.
+   - Draws landmarks on the frame to visually represent detected hand movements.
+
+## Instructions:
+
+1. Install the required libraries using the provided `pip install` command in the README file.
+2. Run the script to initiate real-time control of your mouse pointer using your index finger.
+
+Enjoy the interactive and intuitive control of your mouse pointer with FingerMouse!
 
 # Pip Installs for all the above
 pip install Pillow pywin32 opencv-python mediapipe pyautogui numpy cProfile sounddevice scipy
