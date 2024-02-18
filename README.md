@@ -37,7 +37,10 @@ This impressive Python script leverages the power of MediaPipe and OpenCV to ena
 1. Install the required libraries using the provided `pip install` command in the README file.
 2. Run the script to initiate real-time control of your mouse pointer using your index finger.
 
-Enjoy the interactive and intuitive control of your mouse pointer with FingerMouse!
+Enjoy the interactive and intuitive control of your mouse pointer.
+Oh and don't forget there's a scaling for the x and y movement if you dont want to move your hands as much(remeber anti-jitter constant may need to be adjusted)
+
+Sorry this code is a mess right now, I'll work on cleaning it up when I'm all out of ideas
 
 # Pip Installs for all the above
 pip install Pillow pywin32 opencv-python mediapipe pyautogui numpy cProfile sounddevice scipy
