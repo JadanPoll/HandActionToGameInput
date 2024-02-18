@@ -93,6 +93,15 @@ class MouseCursorManager:
         # Load the custom cursor from a file
         l_custom_cursor = win32gui.LoadImage(0, cursor_path, win32con.IMAGE_CURSOR, *icon_size,  win32con.LR_LOADFROMFILE)
 
+        # Set the hotspot
+        info = win32gui.GetIconInfo(l_custom_cursor)
+        print(info)
+        x, y = icon_size[0] // 2, icon_size[1] // 2 #Needed to make sure hotspot was properly centered for crosshairs
+        info = (info[0], x, y, info[3], info[4])  # Create a new tuple with updated hotspot
+        l_custom_cursor = win32gui.CreateIconIndirect(info)
+
+
+
         return l_custom_cursor
     def change_mouse_pointer(self, condition):
         # Save the current cursor and condition
