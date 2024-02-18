@@ -30,17 +30,19 @@ fs1, data1 = read(FP_UNCLICK)
 # Set the maximum number of allowed threads
 #I'm in tears this might be unnecessary but for some reasing i feel like sd is randomly locking up if too many plays
 #are called on it, even if its non blocking
-max_unclick_threads = 1
-semaphore_click = threading.Semaphore(max_unclick_threads)
 max_click_threads = 1
+semaphore_click = threading.Semaphore(max_click_threads)
+max_unclick_threads = 1
 semaphore_unclick = threading.Semaphore(max_unclick_threads)
 
 def PLAY_ONE_SHOT_CLICK():
+    print("U")
     if not semaphore_click.acquire(blocking=False):
         # Exit the thread if unable to acquire the semaphore
         return
     try:
-        sd.play(data0, fs0, blocking=True)
+        print("Hereertghgreghgtr")
+        sd.play(data0, fs0, blocking=False)
     finally:
         semaphore_click.release()
 
