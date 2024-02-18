@@ -8,7 +8,7 @@ pyautogui.PAUSE = 0
 import numpy as np
 import cProfile
 
-
+import threading
 import sounddevice as sd
 import numpy as np
 
@@ -18,6 +18,8 @@ from mouse_cursor_manager import MouseCursorManager
 import sounddevice as sd
 from scipy.io.wavfile import read
 
+from concurrent.futures import ThreadPoolExecutor
+executor=ThreadPoolExecutor()
 FP_CLICK = "click.wav"
 fs0, data0 = read(FP_CLICK)
 FP_UNCLICK = "unclick.wav"
@@ -56,8 +58,8 @@ prev_mouse_position = pyautogui.position()
 
 
 
-x_scaler=1.5
-y_scaler=1.5
+x_scaler=3.0
+y_scaler=3.0
 def remap_to_pixel_coordinates(x, y):
     # Scale the input coordinates
     #x, y originally range from 0..1
@@ -73,6 +75,24 @@ def remap_to_pixel_coordinates(x, y):
     
     return pixel_x, pixel_y
 
+DISABLE_PYAUTOGUI_MOUSE_MOVE= False
+def safe_pyautogui_function(func, *args, **kwargs):
+    global DISABLE_PYAUTOGUI_MOUSE_MOVE
+    """
+    Wrapper function for pyautogui functions to check the pyautogui_enabled flag.
+    """
+    if not DISABLE_PYAUTOGUI_MOUSE_MOVE:
+        func(*args, **kwargs)
+
+def DISABLE_MOUSE_MOVE():
+    global DISABLE_PYAUTOGUI_MOUSE_MOVE
+    if not DISABLE_PYAUTOGUI_MOUSE_MOVE:
+        DISABLE_PYAUTOGUI_MOUSE_MOVE=True
+def ENABLE_MOUSE_MOVE():
+    global DISABLE_PYAUTOGUI_MOUSE_MOVE
+    if DISABLE_PYAUTOGUI_MOUSE_MOVE:
+        DISABLE_PYAUTOGUI_MOUSE_MOVE=False
+
 
 def move_mouse_lerp(x, y):
     global prev_mouse_position
@@ -82,7 +102,7 @@ def move_mouse_lerp(x, y):
     new_x = (1 - LERP_WEIGHT) * prev_mouse_position[0] + LERP_WEIGHT * x
     new_y = (1 - LERP_WEIGHT) * prev_mouse_position[1] + LERP_WEIGHT * y
 
-    pyautogui.moveTo(int(new_x), int(new_y))
+    safe_pyautogui_function(pyautogui.moveTo,int(new_x), int(new_y))
     prev_mouse_position = (new_x, new_y)
 
 
@@ -265,15 +285,25 @@ def main_loop():
 
         if isFingerThumbTouching(results, 5.0):
             if not IS_MOUSE_DOWN:
+                #Using disable and enable stuff cause to actually click you need to mouse to stop so you can click
+                DISABLE_MOUSE_MOVE()
+                # Schedule the function to run after 5 seconds
+                timer = threading.Timer(0.2, ENABLE_MOUSE_MOVE)
+
+                # Start the timer
+                timer.start()
                 print("Mouse DOWN")
                 pyautogui.mouseDown()
-                PLAY_ONE_SHOT_CLICK()
+
+                executor.submit(PLAY_ONE_SHOT_CLICK)
 
                 IS_MOUSE_DOWN = True
         else:
             if IS_MOUSE_DOWN:
+                ENABLE_MOUSE_MOVE()
                 print("Mouse Up")
-                PLAY_ONE_SHOT_UNCLICK()
+                executor.submit(PLAY_ONE_SHOT_UNCLICK) #Says non- blocking but original funciton itself does have minisule slow down
+
                 pyautogui.mouseUp()
                 IS_MOUSE_DOWN = False
         # Reject outliers in the hand position data
