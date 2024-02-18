@@ -1,5 +1,6 @@
 # Pip Installs for all the above
 pip install Pillow pywin32 opencv-python mediapipe pyautogui numpy cProfile sounddevice scipy
+
 Run as python HandTrack.py in .venv
 
 # HandActionToGameInput
