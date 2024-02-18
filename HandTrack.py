@@ -42,7 +42,7 @@ def PLAY_ONE_SHOT_CLICK():
         return
     try:
         print("Hereertghgreghgtr")
-        sd.play(data0, fs0, blocking=False)
+        sd.play(data0, fs0, blocking=True)
     finally:
         semaphore_click.release()
 
