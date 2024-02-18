@@ -46,6 +46,10 @@ def PLAY_ONE_SHOT_CLICK():
     finally:
         semaphore_click.release()
 
+def ntPLAY_ONE_SHOT_CLICK():
+    sd.play(data0, fs0, blocking=False)
+
+
 def PLAY_ONE_SHOT_UNCLICK():
     if not semaphore_unclick.acquire(blocking=False):
         # Exit the thread if unable to acquire the semaphore
@@ -54,6 +58,11 @@ def PLAY_ONE_SHOT_UNCLICK():
         sd.play(data1, fs1, blocking=True)
     finally:
         semaphore_unclick.release()
+
+def ntPLAY_ONE_SHOT_UNCLICK():
+
+    sd.play(data1, fs1, blocking=False)
+
 # Replace these values with your screen's pixel height and width
 SCREEN_HEIGHT = 1080
 SCREEN_WIDTH = 1920
@@ -315,7 +324,7 @@ def main_loop():
                 timer.start()
                 print("Mouse DOWN")
                 pyautogui.mouseDown()
-                PLAY_ONE_SHOT_CLICK()
+                ntPLAY_ONE_SHOT_CLICK()
                 #threading.Thread(target=PLAY_ONE_SHOT_CLICK).start()
 
                 IS_MOUSE_DOWN = True
@@ -324,7 +333,7 @@ def main_loop():
                 ENABLE_MOUSE_MOVE()
                 print("Mouse Up")
                 pyautogui.mouseUp()
-                PLAY_ONE_SHOT_UNCLICK()
+                ntPLAY_ONE_SHOT_UNCLICK()
                 #threading.Thread(target=PLAY_ONE_SHOT_UNCLICK).start() #Says non- blocking but original funciton itself does have minisule slow down
 
 
