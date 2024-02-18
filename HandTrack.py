@@ -18,21 +18,40 @@ from mouse_cursor_manager import MouseCursorManager
 import sounddevice as sd
 from scipy.io.wavfile import read
 
-from concurrent.futures import ThreadPoolExecutor
-executor=ThreadPoolExecutor()
+
+lock_click = threading.Lock()
+lock_unclick = threading.Lock()
 FP_CLICK = "click.wav"
 fs0, data0 = read(FP_CLICK)
 FP_UNCLICK = "unclick.wav"
 fs1, data1 = read(FP_UNCLICK)
 
-def PLAY_ONE_SHOT_CLICK():
-    sd.play(data0, fs0, blocking=False)
 
+# Set the maximum number of allowed threads
+#I'm in tears this might be unnecessary but for some reasing i feel like sd is randomly locking up if too many plays
+#are called on it, even if its non blocking
+max_unclick_threads = 1
+semaphore_click = threading.Semaphore(max_unclick_threads)
+max_click_threads = 1
+semaphore_unclick = threading.Semaphore(max_unclick_threads)
+
+def PLAY_ONE_SHOT_CLICK():
+    if not semaphore_click.acquire(blocking=False):
+        # Exit the thread if unable to acquire the semaphore
+        return
+    try:
+        sd.play(data0, fs0, blocking=True)
+    finally:
+        semaphore_click.release()
 
 def PLAY_ONE_SHOT_UNCLICK():
-    sd.play(data1, fs1, blocking=False)
-
-
+    if not semaphore_unclick.acquire(blocking=False):
+        # Exit the thread if unable to acquire the semaphore
+        return
+    try:
+        sd.play(data1, fs1, blocking=True)
+    finally:
+        semaphore_unclick.release()
 # Replace these values with your screen's pixel height and width
 SCREEN_HEIGHT = 1080
 SCREEN_WIDTH = 1920
@@ -295,16 +314,17 @@ def main_loop():
                 print("Mouse DOWN")
                 pyautogui.mouseDown()
 
-                executor.submit(PLAY_ONE_SHOT_CLICK)
+                threading.Thread(target=PLAY_ONE_SHOT_CLICK).start()
 
                 IS_MOUSE_DOWN = True
         else:
             if IS_MOUSE_DOWN:
                 ENABLE_MOUSE_MOVE()
                 print("Mouse Up")
-                executor.submit(PLAY_ONE_SHOT_UNCLICK) #Says non- blocking but original funciton itself does have minisule slow down
-
                 pyautogui.mouseUp()
+                threading.Thread(target=PLAY_ONE_SHOT_UNCLICK).start() #Says non- blocking but original funciton itself does have minisule slow down
+
+
                 IS_MOUSE_DOWN = False
         # Reject outliers in the hand position data
         if index_finger_coordinates:
