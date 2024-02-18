@@ -81,5 +81,5 @@ User Interface Design: Create a user-friendly interface for configuring hand ges
 Game Engine Integration: Develop plugins or APIs that allow seamless integration of your application with popular game engines.
 
 
-#Big Question:
+# Big Question:
 How is our relevant. What would we do differently
