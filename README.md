@@ -1,4 +1,4 @@
-# FingerMouse Control with MediaPipe and OpenCV
+# FingerMouse Control with MediaPipe and OpenCV(Windows)
 
 This impressive Python script leverages the power of MediaPipe and OpenCV to enable mouse pointer control using your index finger! Utilizing your computer's camera, it tracks the real-time movement of your index finger through the webcam, translating it into precise control over your mouse pointer on the screen.
 
